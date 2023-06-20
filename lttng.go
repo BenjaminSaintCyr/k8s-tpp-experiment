@@ -17,6 +17,14 @@ void traceEndSpan(uint64_t s_id, char* o_ctx) {
 void traceEvent(char* o_name, char* o_ctx) {
 	tracepoint(k8s_ust, event, o_name, o_ctx);
 }
+
+void traceUnstructEvent(char* o_ctx) {
+	tracepoint(k8s_ust, unstruct_event, o_ctx);
+}
+
+void traceK8sEvent(char* source_arg, char* type_arg, char* reason_arg, char* message_arg, char* uid_arg, char* name_arg) {
+	tracepoint(k8s_ust, k8s_event, source_arg, type_arg, reason_arg, message_arg, uid_arg, name_arg);
+}
 */
 import "C"
 
@@ -40,5 +48,22 @@ func ReportEvent(operationName, context string) {
 	C.traceEvent(
 		C.CString(operationName),
 		C.CString(context),
+	)
+}
+
+func ReportUnstructEvent(context string) {
+	C.traceUnstructEvent(
+		C.CString(context),
+	)
+}
+
+func ReportK8sEvent(source, event_type, reason, message, uid, name string) {
+	C.traceK8sEvent(
+		C.CString(source),
+		C.CString(event_type),
+		C.CString(reason),
+		C.CString(message),
+		C.CString(uid),
+		C.CString(name),
 	)
 }

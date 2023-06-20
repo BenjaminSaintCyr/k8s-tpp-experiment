@@ -68,14 +68,39 @@ TRACEPOINT_EVENT(
     k8s_ust,
     unstruct_event,
 
-    /* Input arguments */
+    /* input arguments */
     TP_ARGS(
         char*, o_ctx
     ),
 
-    /* Output event fields */
+    /* output event fields */
     TP_FIELDS(
         ctf_string(op_ctx, o_ctx)
+    )
+)
+
+TRACEPOINT_EVENT(
+    k8s_ust,
+    k8s_event,
+
+    /* input arguments */
+    TP_ARGS(
+		char*, source_arg,
+        char*, type_arg,
+        char*, reason_arg,
+        char*, message_arg,
+        char*, uid_arg,
+        char*, name_arg
+    ),
+
+    /* output event fields */
+    TP_FIELDS(
+		ctf_string(source, source_arg)
+        ctf_string(type, type_arg)
+        ctf_string(reason, reason_arg)
+        ctf_string(message, message_arg)
+        ctf_string(uid, uid_arg)
+        ctf_string(name, name_arg)
     )
 )
 
