@@ -104,6 +104,22 @@ TRACEPOINT_EVENT(
     )
 )
 
+TRACEPOINT_EVENT(
+    k8s_ust,
+    byte_event,
+
+    /* input arguments */
+    TP_ARGS(
+        const char*, message,
+        int, length
+    ),
+
+    /* output event fields */
+    TP_FIELDS(
+        ctf_sequence_text(char, message_field, message, unsigned int, length)
+    )
+)
+
 #endif /* _TP_H */
 
 #include <lttng/tracepoint-event.h>
