@@ -51,43 +51,65 @@ func CallGo(n int) {
 }
 
 func ReportStartSpan(spanID uint64, parentID uint64, operationName string, context string) {
+	operationNameC := C.CString(operationName)
+	contextC := C.CString(context)
 	C.traceStartSpan(
 		C.uint64_t(spanID),
 		C.uint64_t(parentID),
-		C.CString(operationName),
-		C.CString(context),
+		operationNameC,
+		contextC,
 	)
+	C.free(unsafe.Pointer(operationNameC))
+	C.free(unsafe.Pointer(contextC))
 }
 
 func ReportEndSpan(spanID uint64, context string) {
+	contextC := C.CString(context)
 	C.traceEndSpan(
 		C.uint64_t(spanID),
-		C.CString(context),
+		contextC,
 	)
+	C.free(unsafe.Pointer(contextC))
 }
 
 func ReportEvent(operationName, context string) {
+	contextC := C.CString(context)
 	C.traceEvent(
 		C.CString(operationName),
-		C.CString(context),
+		contextC,
 	)
+	C.free(unsafe.Pointer(contextC))
 }
 
 func ReportUnstructEvent(context string) {
+	contextC := C.CString(context)
 	C.traceUnstructEvent(
-		C.CString(context),
+		contextC,
 	)
+	C.free(unsafe.Pointer(contextC))
 }
 
 func ReportK8sEvent(source, event_type, reason, message, uid, name string) {
+	sourceC := C.CString(source)
+	event_typeC := C.CString(event_type)
+	reasonC := C.CString(reason)
+	messageC := C.CString(message)
+	uidC := C.CString(uid)
+	nameC := C.CString(name)
 	C.traceK8sEvent(
-		C.CString(source),
-		C.CString(event_type),
-		C.CString(reason),
-		C.CString(message),
-		C.CString(uid),
-		C.CString(name),
+		sourceC,
+		event_typeC,
+		reasonC,
+		messageC,
+		uidC,
+		nameC,
 	)
+	C.free(unsafe.Pointer(sourceC))
+	C.free(unsafe.Pointer(event_typeC))
+	C.free(unsafe.Pointer(reasonC))
+	C.free(unsafe.Pointer(messageC))
+	C.free(unsafe.Pointer(uidC))
+	C.free(unsafe.Pointer(nameC))
 }
 
 func ReportByteEvent(message string) {
@@ -97,4 +119,3 @@ func ReportByteEvent(message string) {
 		C.uint(len(messageBytes)),
 	)
 }
-
