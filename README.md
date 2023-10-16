@@ -6,7 +6,6 @@ This repository contains a benchmarking tool designed to evaluate the performanc
 
 - lttng-tools
 - lttng-ust
-- 20 GB of disk space
 
 ## Getting Started
 
